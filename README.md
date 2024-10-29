@@ -12,3 +12,4 @@ This project aims to build a micro service of traffic vehicle detecting human se
 - Core technology: YOLOv8. 
 - DB: MongoDB (MilvusDB, PostgreSQL). 
 - Deploy: Docker.
+- Message Queue: RabbitMQ. 
