@@ -1,14 +1,14 @@
 # detect-sentiment
 
-Building a sentiment detector with YOLO. 
+Building a detector with YOLO.
 
 ## Introduction
 
-This project aims to build a micro service of detecting human sentiment using YOLO. 
+This project aims to build a micro service of traffic vehicle detecting human sentiment using YOLO. 
 
 ## Tech stack
 
 - Server: FastAPI. 
-- Core technology: YOLO. 
+- Core technology: YOLOv8. 
 - DB: MongoDB (MilvusDB, PostgreSQL). 
 - Deploy: Docker.
