@@ -1,11 +1,11 @@
 import json
 
+import uvicorn
 from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware    
-
-from setup_lifespan import lifespan
+from fastapi.middleware.cors import CORSMiddleware
 
 from api import get_image, predict
+from setup_lifespan import lifespan
 
 app = FastAPI(lifespan=lifespan)
 app.add_middleware(
@@ -24,15 +24,15 @@ app.add_middleware(
 
 
 # Base root
-@app.get('/')
-async def get_hello_page(): 
-    return {'msg': "helloword"}
+@app.get("/")
+async def get_hello_page():
+    return {"msg": "helloword"}
 
 
-@app.post('/detect')
+@app.post("/detect")
 async def post_detect(request: Request):
     retries = 3
-    try: 
+    try:
         model = request.app.state.model
         db_cursor = request.app.state.db_cursor
         response = await request.json()
@@ -46,12 +46,12 @@ async def post_detect(request: Request):
                     break
                 retries -= 1
 
-        image_body = response.get('image')
-        if not isinstance(image_body, str): 
+        image_body = response.get("image")
+        if not isinstance(image_body, str):
             raise TypeError(f"Invalid input")
         image = get_image(image_body)
         response = predict(model=model, img_obj=image, cursor=db_cursor)
         return response
-    
-    except Exception as e: 
+
+    except Exception as e:
         raise e

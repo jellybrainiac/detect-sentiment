@@ -1,0 +1,11 @@
+name: yolo-detect
+
+services:
+  detect: 
+    build: ./src
+    container_name: detect_service
+    command: sh -c "pwd && ls -la && python -m uvicorn app:app --reload --host=0.0.0.0 --port=8080"
+    ports:
+      - 8080:8080
+    volumes: 
+      - ./src:/src

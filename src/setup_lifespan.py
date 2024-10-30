@@ -2,11 +2,12 @@ import os
 from contextlib import asynccontextmanager
 
 from ultralytics import YOLO
-from config import ModelConfig, DBConfig
 
+from config import DBConfig, ModelConfig
 from db import DBAction, DBConnection
 
 model_cfg = ModelConfig()
+
 
 @asynccontextmanager
 async def lifespan(app):
