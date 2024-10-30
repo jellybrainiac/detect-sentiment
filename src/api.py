@@ -3,10 +3,10 @@ import urllib
 import cv2
 import numpy as np
 import ultralytics
+import uuid
 
 def get_image(payload:str|bytes, is_color:bool=True) -> np.ndarray: 
-    try: 
-
+    try:
         if isinstance(payload, str): 
             if payload.startswith('http'): 
                 content = urllib.request.urlopen(payload)
@@ -21,7 +21,7 @@ def get_image(payload:str|bytes, is_color:bool=True) -> np.ndarray:
     except Exception as e: 
         raise e 
     
-def predict(model, img_obj:np.ndarray) -> list | dict: 
+def predict(model, img_obj:np.ndarray, cursor) -> list | dict: 
     try: 
         response = {}
         result = model.predict(img_obj)[0]
@@ -33,6 +33,10 @@ def predict(model, img_obj:np.ndarray) -> list | dict:
         conf_ = result.boxes.conf.numpy().tolist()
         response['conf'] = conf_
         response['cls'] = [cls_name[int(idx)] for idx in cls_]
+
+        name = uuid.uuid4().hex
+        cursor.write(name=name, request=response) 
+               
         return response
     
     except Exception as e: 

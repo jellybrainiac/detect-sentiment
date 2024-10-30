@@ -1,8 +1,10 @@
 import os
 from contextlib import asynccontextmanager
 
-from config import ModelConfig
 from ultralytics import YOLO
+from config import ModelConfig, DBConfig
+
+from db import DBAction, DBConnection
 
 model_cfg = ModelConfig()
 
@@ -14,6 +16,10 @@ async def lifespan(app):
 
     app.state.model = YOLO(model_cfg.model_name).to(model_cfg.device)
 
+    db = DBConnection(config=DBConfig())
+    app.state.db_cursor = DBAction(connection=db.connection)
+
     yield
 
     del app.state.model
+    db.connection.close()

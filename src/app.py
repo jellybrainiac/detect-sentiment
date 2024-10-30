@@ -34,7 +34,7 @@ async def post_detect(request: Request):
     retries = 3
     try: 
         model = request.app.state.model
-        print(1)
+        db_cursor = request.app.state.db_cursor
         response = await request.json()
 
         if isinstance(response, str):
@@ -45,14 +45,12 @@ async def post_detect(request: Request):
                 if type(response) == dict:
                     break
                 retries -= 1
+
         image_body = response.get('image')
         if not isinstance(image_body, str): 
             raise TypeError(f"Invalid input")
-        print(1)
         image = get_image(image_body)
-        print(1)
-
-        response = predict(model, img_obj=image)
+        response = predict(model=model, img_obj=image, cursor=db_cursor)
         return response
     
     except Exception as e: 
