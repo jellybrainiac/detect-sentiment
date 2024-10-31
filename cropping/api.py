@@ -23,9 +23,16 @@ def get_image(payload: str | bytes, is_color: bool = True) -> np.ndarray:
         raise e
 
 
-def blurring(model, img_obj: np.ndarray, cursor) -> list | dict:
+def predict(cursor, model, img_obj: np.ndarray, crop_list:list | str) -> list | dict:
+    "Only keep several objects"
     try:
-        response = {}
+        response = {
+            'conf': [], 
+            'cls': []
+        }
+        if isinstance(crop_list, str): 
+            crop_list = [crop_list]
+
         result = model.predict(img_obj)[0]
         assert isinstance(result, ultralytics.engine.results.Results)
 
@@ -33,8 +40,11 @@ def blurring(model, img_obj: np.ndarray, cursor) -> list | dict:
         cls_name = result.names
         cls_ = result.boxes.cls.numpy().tolist()
         conf_ = result.boxes.conf.numpy().tolist()
-        response["conf"] = conf_
-        response["cls"] = [cls_name[int(idx)] for idx in cls_]
+
+        for idx in range(len(cls_)): 
+            if cls_[int(idx)] in crop_list: 
+                response['cls'].append(cls_[int(idx)])
+                response['conf'].append(conf_[idx])
 
         name = uuid.uuid4().hex
         cursor.write(name=name, request=response)
@@ -43,3 +53,4 @@ def blurring(model, img_obj: np.ndarray, cursor) -> list | dict:
 
     except Exception as e:
         raise e
+

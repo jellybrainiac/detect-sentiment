@@ -15,4 +15,4 @@ class ModelConfig(Config):
 # DB Connection
 @dataclass
 class DBConfig:
-    dir: str = "detect.db"
+    dir: str = "crop.db"

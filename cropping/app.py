@@ -26,10 +26,10 @@ app.add_middleware(
 # Base root
 @app.get("/")
 async def get_hello_page():
-    return {"msg": "helloword"}
+    return {"msg": "hellow from crop service"}
 
 
-@app.post("/detect")
+@app.post("/predict")
 async def post_detect(request: Request):
     retries = 3
     try:
@@ -47,10 +47,11 @@ async def post_detect(request: Request):
                 retries -= 1
 
         image_body = response.get("image")
+        crop_list = response.get("crop_list")
         if not isinstance(image_body, str):
             raise TypeError(f"Invalid input")
         image = get_image(image_body)
-        response = predict(model=model, img_obj=image, cursor=db_cursor)
+        response = predict(model=model, img_obj=image, cursor=db_cursor, crop_list=crop_list)
         return response
 
     except Exception as e:

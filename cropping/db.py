@@ -19,7 +19,7 @@ class DBAction:
 
     def create_table(self):
         try:
-            self.cursor.execute("CREATE TABLE detectresult(name, class, conf)")
+            self.cursor.execute("CREATE TABLE cropresult(name, class, conf)")
         except Exception as e:
             raise e
 
@@ -35,7 +35,7 @@ class DBAction:
             class_labels = str(request["cls"])
 
             self.cursor.execute(
-                f"""INSERT INTO detectresult(name, class, conf) 
+                f"""INSERT INTO cropresult(name, class, conf) 
                                 VALUES(?, ?, ?)""",
                 (name, class_labels, conf_scores),
             )
@@ -45,6 +45,6 @@ class DBAction:
     def read(self, request: str):
         try:
             assert isinstance(request, str)
-            self.cursor.execute(f"""SELECT * FROM detectresult WHERE name={request}""")
+            self.cursor.execute(f"""SELECT * FROM cropresult WHERE name={request}""")
         except Exception as e:
             raise e

@@ -2,10 +2,28 @@ name: code-eye
 
 services:
   detect: 
-    build: ./detect
+    build: ./detecting
     container_name: detect_service
     command: sh -c "pwd && ls -la && python -m uvicorn app:app --reload --host=0.0.0.0 --port=8080"
     ports:
       - 8080:8080
     volumes: 
-      - ./detect:/detect
+      - ./detecting:/detecting
+
+  blur: 
+    build: ./blurring
+    container_name: blur_service
+    command: sh -c "pwd && ls -la && python -m uvicorn app:app --reload --host=0.0.0.0 --port=7070"
+    ports:
+      - 7070:7070
+    volumes: 
+      - ./blurring:/blurring
+
+  crop: 
+    build: ./cropping
+    container_name: crop_service
+    command: sh -c "pwd && ls -la && python -m uvicorn app:app --reload --host=0.0.0.0 --port=6060"
+    ports:
+      - 6060:6060
+    volumes: 
+      - ./cropping:/cropping

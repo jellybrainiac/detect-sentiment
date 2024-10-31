@@ -26,17 +26,16 @@ app.add_middleware(
 # Base root
 @app.get("/")
 async def get_hello_page():
-    return {"msg": "helloword"}
+    return {"msg": "hello from blur service"}
 
 
-@app.post("/detect")
+@app.post("/predict")
 async def post_detect(request: Request):
     retries = 3
     try:
         model = request.app.state.model
         db_cursor = request.app.state.db_cursor
         response = await request.json()
-
         if isinstance(response, str):
             while retries >= 0:
                 # Normally, it executes 2 times and break.
@@ -47,10 +46,11 @@ async def post_detect(request: Request):
                 retries -= 1
 
         image_body = response.get("image")
+        blur_list = response.get("blur_list")
         if not isinstance(image_body, str):
             raise TypeError(f"Invalid input")
         image = get_image(image_body)
-        response = predict(model=model, img_obj=image, cursor=db_cursor)
+        response = predict(model=model, img_obj=image, cursor=db_cursor, blur_list=blur_list)
         return response
 
     except Exception as e:
