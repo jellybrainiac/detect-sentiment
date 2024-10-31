@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd ./src
+cd ./blurring
 # Assuming uvicorn requires typing_extensions (modify if not)
 if [ -n "$VIRTUAL_ENV" ]; then
   # Use uvicorn within virtual environment (if activated)

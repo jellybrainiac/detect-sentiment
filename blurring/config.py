@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 
+import torch
 
 # Model Configuration
 @dataclass
 class Config:
-    device: str = "cpu"
+    device: str = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 @dataclass
@@ -15,4 +16,4 @@ class ModelConfig(Config):
 # DB Connection
 @dataclass
 class DBConfig:
-    dir: str = "detect.db"
+    dir: str = "blurring.db"

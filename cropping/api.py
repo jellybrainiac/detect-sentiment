@@ -23,7 +23,7 @@ def get_image(payload: str | bytes, is_color: bool = True) -> np.ndarray:
         raise e
 
 
-def blurring(cursor, model, img_obj: np.ndarray, obj:list) -> list | dict:
+def blurring(model, img_obj: np.ndarray, cursor) -> list | dict:
     try:
         response = {}
         result = model.predict(img_obj)[0]
