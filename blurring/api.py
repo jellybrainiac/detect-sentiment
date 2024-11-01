@@ -23,14 +23,11 @@ def get_image(payload: str | bytes, is_color: bool = True) -> np.ndarray:
         raise e
 
 
-def predict(cursor, model, img_obj: np.ndarray, blur_list:list | str) -> list | dict:
+def predict(cursor, model, img_obj: np.ndarray, blur_list: list | str) -> list | dict:
     "Remove several objects in detected list"
     try:
-        response = {
-            'conf': [], 
-            'cls': []
-        }
-        if isinstance(blur_list, str): 
+        response = {"conf": [], "cls": []}
+        if isinstance(blur_list, str):
             blur_list = [blur_list]
 
         result = model.predict(img_obj)[0]
@@ -41,11 +38,10 @@ def predict(cursor, model, img_obj: np.ndarray, blur_list:list | str) -> list | 
         cls_ = result.boxes.cls.numpy().tolist()
         conf_ = result.boxes.conf.numpy().tolist()
 
-
-        for idx in range(len(cls_)): 
-            if cls_[int(idx)] not in blur_list: 
-                response['cls'].append(cls_[int(idx)])
-                response['conf'].append(conf_[idx])
+        for idx in range(len(cls_)):
+            if cls_[int(idx)] not in blur_list:
+                response["cls"].append(cls_name[int(idx)])
+                response["conf"].append(conf_[idx])
 
         name = uuid.uuid4().hex
         cursor.write(name=name, request=response)

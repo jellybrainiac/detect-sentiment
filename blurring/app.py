@@ -50,7 +50,9 @@ async def post_detect(request: Request):
         if not isinstance(image_body, str):
             raise TypeError(f"Invalid input")
         image = get_image(image_body)
-        response = predict(model=model, img_obj=image, cursor=db_cursor, blur_list=blur_list)
+        response = predict(
+            model=model, img_obj=image, cursor=db_cursor, blur_list=blur_list
+        )
         return response
 
     except Exception as e:

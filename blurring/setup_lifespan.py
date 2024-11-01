@@ -23,4 +23,5 @@ async def lifespan(app):
     yield
 
     del app.state.model
+    del app.state.db_cursor
     db.connection.close()
